@@ -1,0 +1,80 @@
+---
+import { nav, repoHref } from "../site";
+import Logo from "./Logo.astro";
+---
+
+<header class="nav">
+  <nav class="nav-inner wrap" aria-label="Main">
+    <Logo />
+    <ul class="links">
+      {nav.map((item) => (
+        <li>
+          <a href={item.href}>{item.label}</a>
+        </li>
+      ))}
+    </ul>
+    <a class="pill nav-cta" href={repoHref}>
+      GitHub
+    </a>
+  </nav>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: linear-gradient(
+      180deg,
+      rgb(255 255 255 / 0.96) 55%,
+      rgb(255 255 255 / 0)
+    );
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    mask-image: linear-gradient(180deg, #000 75%, transparent);
+  }
+
+  .nav-inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    height: 88px;
+  }
+
+  .links {
+    display: flex;
+    gap: 26px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 14.5px;
+  }
+
+  .links a {
+    text-decoration: none;
+    color: var(--ink-soft);
+    transition: color 150ms;
+  }
+
+  .links a:hover {
+    color: var(--ink);
+  }
+
+  .nav-cta {
+    justify-self: end;
+    height: 40px;
+    padding: 0 18px;
+    font-size: 14.5px;
+  }
+
+  @media (max-width: 760px) {
+    .nav-inner {
+      grid-template-columns: 1fr auto;
+      height: 72px;
+    }
+
+    .links {
+      display: none;
+    }
+  }
+</style>

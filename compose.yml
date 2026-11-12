@@ -1,0 +1,56 @@
+x-postgres: &postgres
+  image: pgvector/pgvector:pg16
+  environment:
+    POSTGRES_USER: hondo
+    POSTGRES_PASSWORD: hondo
+    POSTGRES_DB: hondo
+  volumes:
+    - pgdata:/var/lib/postgresql/data
+  healthcheck:
+    test: ["CMD-SHELL", "pg_isready -U hondo -d hondo"]
+    interval: 2s
+    timeout: 2s
+    retries: 15
+  restart: unless-stopped
+
+x-hondo: &hondo
+  image: ${HONDO_IMAGE:-hondo:local}
+  build: .
+  env_file: ${HONDO_ENV_FILE:-.env}
+  environment:
+    HONDO_DATABASE__URL: postgresql://hondo:hondo@postgres:5432/hondo
+  restart: unless-stopped
+  depends_on:
+    migrate:
+      condition: service_completed_successfully
+
+services:
+  postgres: *postgres
+
+  migrate:
+    <<: *hondo
+    command: ["migrate"]
+    restart: "no"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  api:
+    <<: *hondo
+    command: ["api"]
+    ports:
+      - "${HONDO_PORT:-127.0.0.1:8000}:8000"
+
+  worker:
+    <<: *hondo
+    command: ["serve"]
+    stop_grace_period: 30s
+
+  dev-postgres:
+    <<: *postgres
+    profiles: [dev]
+    ports:
+      - "127.0.0.1:5455:5432"
+
+volumes:
+  pgdata:

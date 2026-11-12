@@ -1,0 +1,71 @@
+---
+import { nav, repoHref } from "../site";
+import Logo from "./Logo.astro";
+---
+
+<footer class="footer wrap">
+  <div class="brand">
+    <Logo size={26} />
+    <p>An on-call teammate in Slack.</p>
+  </div>
+  <nav aria-label="Footer">
+    <ul>
+      {nav.map((item) => (
+        <li>
+          <a href={item.href}>{item.label}</a>
+        </li>
+      ))}
+      <li>
+        <a href={repoHref}>GitHub</a>
+      </li>
+    </ul>
+  </nav>
+  <p class="legal">© 2026 Hondo · Apache-2.0</p>
+</footer>
+
+<style>
+  .footer {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 40px;
+    padding-block: clamp(80px, 10vw, 120px) 40px;
+  }
+
+  .brand p {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 26px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 14.5px;
+  }
+
+  a {
+    color: var(--ink-soft);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--ink);
+  }
+
+  .legal {
+    grid-column: 1 / -1;
+    margin: 0;
+    color: var(--dust);
+    font-size: 13px;
+  }
+
+  @media (max-width: 640px) {
+    .footer {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

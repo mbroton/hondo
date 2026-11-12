@@ -1,0 +1,17 @@
+title: Atlassian
+description: Jira, Confluence and Bitbucket Cloud through Atlassian's MCP server.
+url: https://mcp.atlassian.com/v2/mcp
+headers:
+  Authorization: "Bearer {token}"
+inputs:
+  token:
+    label: API token
+    secret: true
+    help: An Atlassian API token made for the app "Atlassian MCP V2".
+setup:
+  - "An admin of each Atlassian organization that Hondo reads must turn on API token access: in Atlassian Administration, open Connectors, then Atlassian MCP server, then Authentication, and turn on API token."
+  - Each Bitbucket workspace that Hondo reads must be linked to one of those organizations.
+  - If you can, use a separate Atlassian account for Hondo. Atlassian service accounts cannot read Bitbucket yet.
+  - "In that account, open Security, then API tokens, then Create API token with scopes. Select the app Atlassian MCP V2."
+  - "Select the read and search scopes of each product that Hondo reads, for example read:jira:agent-interface, search:jira:agent-interface and read:bitbucket:agent-interface. Add a write scope only if Hondo can change that product."
+  - The token expires. Before that date, make a new token and enter it on this connector.

@@ -1,0 +1,45 @@
+name: Server CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/server/**"
+      - "apps/client/src/lib/api/openapi.json"
+      - "Dockerfile"
+      - ".dockerignore"
+      - ".github/workflows/ci-server.yml"
+  pull_request:
+    paths:
+      - "apps/server/**"
+      - "apps/client/src/lib/api/openapi.json"
+      - "Dockerfile"
+      - ".dockerignore"
+      - ".github/workflows/ci-server.yml"
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - run: uv sync --all-groups --frozen
+      - run: uv run ruff check src tests
+      - run: uv run ruff format --check src tests
+      - run: uv run pyright
+      # Integration tests use testcontainers; Docker ships on ubuntu runners.
+      - run: uv run pytest -q
+
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false

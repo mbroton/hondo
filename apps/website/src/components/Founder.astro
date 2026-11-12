@@ -1,0 +1,137 @@
+---
+import { issuesHref } from "../site";
+---
+
+<section class="section wrap" aria-labelledby="founder-title">
+  <div class="section-head">
+    <h2 class="duo" id="founder-title">
+      built by one engineer <span>who reads every message</span>
+    </h2>
+  </div>
+
+  <div class="chat">
+    <div class="from">
+      <span class="avatar" aria-hidden="true">
+        M
+      </span>
+      <div class="stack">
+        <p class="who">Michał</p>
+        <p class="bubble">hey 👋 I'm Michał, and I build Hondo.</p>
+        <p class="bubble">
+          in small teams, incidents wait for{" "}
+          <span class="chip amber">🔔 the person who knows</span>. they get
+          every ping, and everyone else guesses.
+        </p>
+        <p class="bubble">
+          Hondo joins the thread, checks your tools, and shows{" "}
+          <span class="chip blue">🧾 where each answer came from</span>.
+        </p>
+        <p class="bubble last">
+          it is open source. try it on{" "}
+          <span class="chip green">🔁 your next incident</span> and tell me what
+          it got wrong.
+        </p>
+      </div>
+    </div>
+
+    <p class="who you">you</p>
+    <a class="bubble reply" href={issuesHref}>
+      opening an issue 🙌
+    </a>
+  </div>
+</section>
+
+<style>
+  .chat {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    margin-inline: auto;
+  }
+
+  .from {
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    align-items: end;
+    gap: 10px;
+  }
+
+  .stack {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .who {
+    margin: 0 0 2px 14px;
+    color: var(--dust);
+    font-size: 12.5px;
+  }
+
+  .bubble {
+    margin: 0;
+    padding: 10px 16px;
+    border-radius: 20px;
+    background: var(--panel);
+    font-size: 16px;
+    line-height: 1.55;
+    text-wrap: pretty;
+  }
+
+  .last {
+    border-bottom-left-radius: 6px;
+  }
+
+  .avatar {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--band);
+    color: #fff;
+    font-size: 14px;
+  }
+
+  .you {
+    align-self: flex-end;
+    margin: 22px 14px 6px 0;
+  }
+
+  .reply {
+    align-self: flex-end;
+    background: var(--ink);
+    color: #fff;
+    text-decoration: none;
+    border-bottom-right-radius: 6px;
+    transition: transform 160ms var(--ease-out);
+  }
+
+  .reply:hover {
+    transform: translateY(-1px);
+  }
+
+  .chip {
+    display: inline-block;
+    padding: 0 8px;
+    border-radius: 999px;
+    font-size: 0.9em;
+    white-space: nowrap;
+  }
+
+  .blue {
+    background: #e3eefb;
+    color: #1e5aa8;
+  }
+
+  .amber {
+    background: #fbecd9;
+    color: #8f4a0e;
+  }
+
+  .green {
+    background: #e2f3e6;
+    color: #23683d;
+  }
+</style>

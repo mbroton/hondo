@@ -1,0 +1,91 @@
+---
+import { repoHref } from "../site";
+import Arrow from "./Arrow.astro";
+---
+
+<section class="section wrap" aria-labelledby="closing-title">
+  <div class="card">
+    <img
+      class="hat"
+      src="/hat.webp"
+      alt=""
+      width="520"
+      height="520"
+      loading="lazy"
+    />
+    <div class="copy">
+      <h2 id="closing-title">
+        let the person who knows <span>get some sleep</span>
+      </h2>
+      <a class="pill" href={repoHref}>
+        Get it on GitHub <Arrow />
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .card {
+    position: relative;
+    display: grid;
+    align-items: end;
+    min-height: 460px;
+    padding: clamp(28px, 5vw, 56px);
+    overflow: hidden;
+    border-radius: 36px;
+    background:
+      radial-gradient(
+        120% 90% at 85% 10%,
+        rgb(217 120 47 / 0.32),
+        transparent 60%
+      ),
+      var(--band);
+    color: #fff;
+  }
+
+  .hat {
+    position: absolute;
+    right: -3%;
+    top: 50%;
+    width: min(500px, 46%);
+    height: auto;
+    transform: translateY(-50%) rotate(-10deg);
+    filter: drop-shadow(0 40px 40px rgb(0 0 0 / 0.35));
+  }
+
+  .copy {
+    position: relative;
+    max-width: 54%;
+  }
+
+  h2 {
+    margin: 0 0 28px;
+    font-weight: 400;
+    font-size: clamp(38px, 5.4vw, 64px);
+    line-height: 1.02;
+    letter-spacing: -0.05em;
+    text-wrap: balance;
+  }
+
+  h2 span {
+    display: block;
+    color: rgb(255 255 255 / 0.55);
+  }
+
+  @media (max-width: 640px) {
+    .card {
+      min-height: 520px;
+    }
+
+    .hat {
+      top: -6%;
+      right: -14%;
+      width: 82%;
+      transform: rotate(-10deg);
+    }
+
+    .copy {
+      max-width: none;
+    }
+  }
+</style>

@@ -1,0 +1,331 @@
+---
+import FeatureRow from "./FeatureRow.astro";
+import Msg from "./slack/Msg.astro";
+
+const maya = { name: "Maya", color: "#2f7d8c" };
+
+const connectors = [
+  { name: "GitHub", tile: "#24292f", state: "Connected", tools: 12, ok: true },
+  {
+    name: "Atlassian",
+    tile: "#1868db",
+    state: "Connected",
+    tools: 9,
+    ok: true,
+  },
+  {
+    name: "Your metrics server",
+    tile: "#8e8a86",
+    state: "Sign-in required",
+    tools: 0,
+    ok: false,
+  },
+];
+---
+
+<section class="section wrap" aria-labelledby="features-title">
+  <div class="section-head">
+    <h2 class="duo" id="features-title">
+      trust it at 3 a.m. <span>and leave it running</span>
+    </h2>
+  </div>
+
+  <FeatureRow
+    id="receipts"
+    title="receipts"
+    dim="for every claim"
+    text="Hondo never says it checked something without a tool result. Ask for sources, and it shows the tools, the queries and the links."
+    more={[
+      "Each claim comes from a tool result",
+      "An empty lookup says exactly what was searched",
+      "Its own ideas are marked as a guess",
+    ]}
+  >
+    <div class="sheet">
+      <Msg who={maya} time="10:11" still>
+        <p>
+          <span class="at">@Hondo</span> sources?
+        </p>
+      </Msg>
+      <Msg who="hondo" time="10:11" still>
+        <p>I checked three things:</p>
+        <ul class="receipts">
+          <li>
+            GitHub deployments for production since 10:00: <b>3 deploys</b>
+          </li>
+          <li>
+            Traces for <code>service:checkout status:error</code>, 10:00 to
+            10:09: <b>1,284 spans</b>
+          </li>
+          <li>
+            The diff of PR #412, <code>config/payment.yaml</code> line 18
+          </li>
+        </ul>
+      </Msg>
+    </div>
+  </FeatureRow>
+
+  <FeatureRow
+    id="quiet"
+    title="quiet"
+    dim="until it has something"
+    text="Hondo reads the thread like a teammate. It answers what is for it and stays out of the way when people talk among themselves."
+    more={[
+      "One answer for a burst of messages",
+      "A status line shows the work, not a stream of messages",
+      "It speaks mid-run only for a finding, a blocker or a question",
+    ]}
+    flip
+  >
+    <p class="chips">
+      it follows the threads it <span class="chip blue">🧵 joined</span>,
+      answers what is <span class="chip amber">👋 for it</span>, and stays{" "}
+      <span class="chip green">🤫 quiet</span> while you talk among yourselves.
+    </p>
+  </FeatureRow>
+
+  <FeatureRow
+    id="tools"
+    title="your tools"
+    dim="your rules"
+    text="Connect the official MCP servers of the tools you already use. Admins choose the tools and the channels."
+    more={[
+      "Official vendor MCP servers, with OAuth or a key",
+      "An admin approves each tool and picks the channels",
+      "GitHub and Atlassian come with a what-changed skill",
+    ]}
+  >
+    <div class="sheet connectors">
+      {connectors.map((c) => (
+        <div class="connector">
+          <span class="tile" style={`background:${c.tile}`}>
+            {c.name[0]}
+          </span>
+          <span class="name">
+            <b>{c.name}</b>
+            <small>{c.ok ? `${c.tools} tools approved` : "No tools yet"}</small>
+          </span>
+          <span class:list={["state", { ok: c.ok }]}>{c.state}</span>
+        </div>
+      ))}
+      <div class="channels">
+        <span>Channels</span>
+        <span class="tag">#inc-checkout</span>
+        <span class="tag">#inc-orders</span>
+        <span class="tag">#eng</span>
+      </div>
+    </div>
+  </FeatureRow>
+
+  <FeatureRow
+    id="servers"
+    title="your servers"
+    dim="your model key"
+    text="Run Hondo on your own infrastructure for free. Conversations stay in your Postgres, and you choose the model."
+    more={[
+      "Free to self-host",
+      "Vercel AI Gateway, OpenAI or Anthropic, with your key",
+      "A failure stops one run only, and runs continue after a crash",
+    ]}
+    flip
+  >
+    <div class="infra" aria-hidden="true">
+      <div class="box">
+        <span class="box-title">Your servers</span>
+        <span class="node">Hondo</span>
+        <span class="node">Postgres</span>
+        <span class="node">Dashboard</span>
+      </div>
+      <div class="link"></div>
+      <div class="box keys">
+        <span class="box-title">Your model key</span>
+        <span class="node">Vercel AI Gateway</span>
+        <span class="node">OpenAI</span>
+        <span class="node">Anthropic</span>
+      </div>
+    </div>
+  </FeatureRow>
+</section>
+
+<style>
+  .sheet {
+    width: 100%;
+    max-width: 440px;
+    padding: 14px 18px;
+    border-radius: var(--radius-lg);
+    background: var(--paper);
+    box-shadow:
+      0 1px 2px rgb(32 28 25 / 0.06),
+      0 24px 48px -28px rgb(32 28 25 / 0.3);
+  }
+
+  .receipts {
+    margin: 6px 0 0;
+    padding-left: 18px;
+  }
+
+  .receipts li {
+    padding: 2px 0;
+  }
+
+  .chips {
+    max-width: 15em;
+    margin: 0;
+    font-size: clamp(24px, 2.6vw, 30px);
+    line-height: 1.6;
+    letter-spacing: -0.035em;
+  }
+
+  .chip {
+    display: inline-block;
+    padding: 0 10px;
+    border-radius: 999px;
+    font-size: 0.82em;
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+
+  .blue {
+    background: #e3eefb;
+    color: #1e5aa8;
+  }
+
+  .amber {
+    background: #fbecd9;
+    color: #8f4a0e;
+  }
+
+  .green {
+    background: #e2f3e6;
+    color: #23683d;
+  }
+
+  .connectors {
+    padding: 8px;
+  }
+
+  .connector {
+    display: grid;
+    grid-template-columns: 34px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 14px;
+  }
+
+  .connector + .connector {
+    border-top: 1px solid #f0edea;
+    border-radius: 0;
+  }
+
+  .tile {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .name {
+    display: grid;
+    line-height: 1.25;
+    font-size: 15px;
+  }
+
+  .name b {
+    font-weight: 500;
+  }
+
+  .name small {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .state {
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: #fbecd9;
+    color: #8f4a0e;
+    font-size: 12.5px;
+  }
+
+  .state.ok {
+    background: #e2f3e6;
+    color: #23683d;
+  }
+
+  .channels {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+    padding: 12px 10px 8px;
+    border-top: 1px solid #f0edea;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .channels span:first-child {
+    margin-right: 4px;
+  }
+
+  .tag {
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: var(--panel);
+    color: var(--ink);
+  }
+
+  .infra {
+    display: grid;
+    justify-items: center;
+    width: 100%;
+    max-width: 380px;
+  }
+
+  .box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 18px;
+    border: 1.5px dashed #cfc8c1;
+    border-radius: var(--radius-lg);
+  }
+
+  .box-title {
+    width: 100%;
+    margin-bottom: 4px;
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+  }
+
+  .node {
+    padding: 8px 14px;
+    border-radius: 12px;
+    background: var(--paper);
+    box-shadow: 0 1px 2px rgb(32 28 25 / 0.08);
+    font-size: 14.5px;
+  }
+
+  .keys {
+    border-style: solid;
+    border-color: transparent;
+    background: var(--panel-deep);
+  }
+
+  .link {
+    width: 1.5px;
+    height: 34px;
+    background: repeating-linear-gradient(
+      180deg,
+      #b9b1a9 0 5px,
+      transparent 5px 9px
+    );
+  }
+</style>

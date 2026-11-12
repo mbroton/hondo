@@ -1,0 +1,31 @@
+---
+import Closing from "../components/Closing.astro";
+import Demo from "../components/Demo.astro";
+import Faq from "../components/Faq.astro";
+import Features from "../components/Features.astro";
+import Footer from "../components/Footer.astro";
+import Founder from "../components/Founder.astro";
+import Hero from "../components/Hero.astro";
+import Nav from "../components/Nav.astro";
+import Pain from "../components/Pain.astro";
+import Setup from "../components/Setup.astro";
+import Base from "../layouts/Base.astro";
+---
+
+<Base
+  title="Hondo: an on-call teammate in Slack"
+  description="Mention @hondo in the incident thread. It checks your deploys, pull requests and logs, answers with a source for each claim, and anyone in the thread can steer it."
+>
+  <Nav />
+  <main>
+    <Hero />
+    <Demo />
+    <Pain />
+    <Features />
+    <Setup />
+    <Founder />
+    <Faq />
+    <Closing />
+  </main>
+  <Footer />
+</Base>

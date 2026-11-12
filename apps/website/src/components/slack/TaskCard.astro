@@ -1,0 +1,102 @@
+---
+interface Props {
+  at: number;
+  items: { text: string; run: number; done: number }[];
+}
+
+const { at, items } = Astro.props;
+---
+
+<div class="card" data-tl={`${at}:on`}>
+  {items.map((item) => (
+    <div class="item" data-tl={`0:todo,${item.run}:run,${item.done}:done`}>
+      <span class="mark" />
+      <span class="text">{item.text}</span>
+    </div>
+  ))}
+</div>
+
+<style>
+  .card {
+    display: none;
+    margin-top: 6px;
+    padding: 10px 12px;
+    border: 1px solid #e6e2dd;
+    border-left: 3px solid #d9cfc6;
+    border-radius: 8px;
+    background: #fff;
+  }
+
+  .card[data-s="on"] {
+    display: block;
+    animation: card-in 380ms var(--ease-out) both;
+  }
+
+  @keyframes card-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 2px 0;
+    font-size: 13.5px;
+    color: #8b8783;
+    transition: color 240ms;
+  }
+
+  .mark {
+    position: relative;
+    flex: none;
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid #c9c3bd;
+    border-radius: 4px;
+    transition:
+      background 240ms,
+      border-color 240ms;
+  }
+
+  .item[data-s="run"] {
+    color: var(--ink);
+    font-style: italic;
+  }
+
+  .item[data-s="run"] .mark {
+    border-color: var(--saddle-hi);
+    border-radius: 50%;
+    border-right-color: transparent;
+    animation: spin 0.8s linear infinite;
+  }
+
+  .item[data-s="done"] {
+    color: var(--ink);
+  }
+
+  .item[data-s="done"] .mark {
+    border-color: #2f8f5b;
+    background: #2f8f5b;
+  }
+
+  .item[data-s="done"] .mark::after {
+    content: "";
+    position: absolute;
+    left: 3.5px;
+    top: 0.5px;
+    width: 4px;
+    height: 8px;
+    border: solid #fff;
+    border-width: 0 1.6px 1.6px 0;
+    transform: rotate(45deg);
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>

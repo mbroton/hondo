@@ -1,0 +1,16 @@
+*
+!apps/client
+!apps/server
+**/node_modules
+**/dist
+**/test-results
+**/playwright-report
+**/.venv
+**/.env
+**/__pycache__
+**/.pytest_cache
+**/.ruff_cache
+apps/server/tests
+**/.claude
+**/.codex
+**/.agents

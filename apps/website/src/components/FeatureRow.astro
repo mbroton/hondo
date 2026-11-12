@@ -1,0 +1,207 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  dim: string;
+  text: string;
+  more: string[];
+  flip?: boolean;
+}
+
+const { id, title, dim, text, more, flip = false } = Astro.props;
+---
+
+<article class:list={["row", { flip }]} aria-labelledby={`${id}-title`}>
+  <div class="visual">
+    <slot />
+  </div>
+  <div class="copy">
+    <h3 id={`${id}-title`}>
+      {title} <span>{dim}</span>
+    </h3>
+    <p>{text}</p>
+    <button
+      class="more"
+      type="button"
+      aria-expanded="false"
+      aria-controls={`${id}-more`}
+      data-more
+    >
+      <span class="plus" aria-hidden="true"></span>
+      <span class="when-closed">read more</span>
+      <span class="when-open">close</span>
+    </button>
+    <div class="drawer" id={`${id}-more`} aria-hidden="true">
+      <ul>
+        {more.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</article>
+
+<style>
+  .row {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    align-items: center;
+    gap: clamp(32px, 6vw, 80px);
+  }
+
+  .row + .row {
+    margin-top: clamp(56px, 8vw, 96px);
+  }
+
+  .flip .visual {
+    order: 2;
+  }
+
+  .visual {
+    display: grid;
+    place-items: center;
+    min-height: 380px;
+    padding: clamp(24px, 4vw, 44px);
+    border-radius: var(--radius-xl);
+    background: var(--panel);
+    overflow: hidden;
+  }
+
+  h3 {
+    margin: 0;
+    font-weight: 400;
+    font-size: clamp(32px, 4vw, 44px);
+    line-height: 1.04;
+    letter-spacing: -0.045em;
+  }
+
+  h3 span {
+    display: block;
+    color: var(--dust);
+  }
+
+  p {
+    max-width: 30em;
+    margin: 18px 0 0;
+    color: var(--muted);
+    text-wrap: pretty;
+  }
+
+  .more {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 34px;
+    margin-top: 22px;
+    padding: 0 14px 0 12px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--paper);
+    box-shadow:
+      inset 0 0 0 1px var(--line),
+      0 1px 2px rgb(32 28 25 / 0.05);
+    font-size: 13.5px;
+    cursor: pointer;
+  }
+
+  .plus {
+    position: relative;
+    width: 10px;
+    height: 10px;
+  }
+
+  .plus::before,
+  .plus::after {
+    content: "";
+    position: absolute;
+    inset: 4.25px 0;
+    border-radius: 1px;
+    background: currentColor;
+    transition: transform 260ms var(--ease-out);
+  }
+
+  .plus::after {
+    transform: rotate(90deg);
+  }
+
+  .more[aria-expanded="true"] .plus::after {
+    transform: rotate(0deg);
+  }
+
+  .when-open,
+  .more[aria-expanded="true"] .when-closed {
+    display: none;
+  }
+
+  .more[aria-expanded="true"] .when-open {
+    display: inline;
+  }
+
+  .drawer {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 360ms var(--ease-drawer);
+  }
+
+  .more[aria-expanded="true"] + .drawer {
+    grid-template-rows: 1fr;
+  }
+
+  ul {
+    min-height: 0;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    position: relative;
+    padding: 6px 0 6px 22px;
+    font-size: 15px;
+  }
+
+  li:first-child {
+    margin-top: 16px;
+  }
+
+  li::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 13px;
+    width: 9px;
+    height: 5px;
+    border: solid var(--saddle);
+    border-width: 0 0 1.6px 1.6px;
+    transform: rotate(-45deg);
+  }
+
+  @media (max-width: 860px) {
+    .row {
+      grid-template-columns: 1fr;
+    }
+
+    .flip .visual {
+      order: 0;
+    }
+
+    .visual {
+      min-height: 0;
+    }
+  }
+</style>
+
+<script>
+  for (const button of document.querySelectorAll<HTMLButtonElement>(
+    "[data-more]",
+  )) {
+    button.addEventListener("click", () => {
+      const open = button.getAttribute("aria-expanded") === "true";
+      button.setAttribute("aria-expanded", String(!open));
+      document
+        .getElementById(button.getAttribute("aria-controls") ?? "")
+        ?.setAttribute("aria-hidden", String(open));
+    });
+  }
+</script>

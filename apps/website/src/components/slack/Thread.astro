@@ -1,0 +1,74 @@
+---
+interface Props {
+  channel: string;
+}
+
+const { channel } = Astro.props;
+---
+
+<div class="thread">
+  <header>
+    <b>Thread</b>
+    <span># {channel}</span>
+  </header>
+  <div class="scroll" data-scroll>
+    <slot />
+  </div>
+  <div class="foot">
+    <slot name="status" />
+    <div class="reply">Reply…</div>
+  </div>
+</div>
+
+<style>
+  .thread {
+    display: flex;
+    flex-direction: column;
+    height: var(--thread-h, 480px);
+  }
+
+  header {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 12px 20px;
+    border-bottom: 1px solid #ece9e6;
+    font-size: 15px;
+  }
+
+  header span {
+    color: #6b6763;
+    font-size: 13px;
+  }
+
+  .scroll {
+    flex: 1;
+    overflow: hidden;
+    padding: 8px 20px 4px;
+    scroll-behavior: smooth;
+  }
+
+  .foot {
+    padding: 4px 20px 16px;
+  }
+
+  .reply {
+    padding: 10px 12px;
+    border: 1px solid #d9d5d1;
+    border-radius: 9px;
+    color: #9a958f;
+    font-size: 14px;
+  }
+
+  @media (max-width: 720px) {
+    .thread {
+      height: var(--thread-h-sm, 540px);
+    }
+
+    header,
+    .scroll,
+    .foot {
+      padding-inline: 14px;
+    }
+  }
+</style>

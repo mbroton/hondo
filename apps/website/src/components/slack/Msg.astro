@@ -1,0 +1,146 @@
+---
+export type Person = "hondo" | "alerts" | { name: string; color: string };
+
+interface Props {
+  who: Person;
+  time: string;
+  at?: number;
+  still?: boolean;
+}
+
+const { who, time, at = 0, still = false } = Astro.props;
+
+const name = who === "hondo" ? "Hondo" : who === "alerts" ? "Alerts" : who.name;
+const isApp = who === "hondo" || who === "alerts";
+---
+
+<div class="msg" data-tl={still ? undefined : `${at}:on`}>
+  {who === "hondo" ? (
+    <span class="avatar hondo">
+      <img src="/hat.webp" alt="" width="26" height="26" />
+    </span>
+  ) : who === "alerts" ? (
+    <span class="avatar alerts">!</span>
+  ) : (
+    <span class="avatar" style={`background:${who.color}`}>
+      {who.name[0]}
+    </span>
+  )}
+  <div class="body">
+    <div class="meta">
+      <b>{name}</b>
+      {isApp && <span class="app">APP</span>}
+      <time>{time}</time>
+    </div>
+    <slot />
+  </div>
+</div>
+
+<style>
+  .msg {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 10px;
+    padding: 7px 0;
+  }
+
+  .msg[data-tl] {
+    display: none;
+  }
+
+  .msg[data-s="on"] {
+    display: grid;
+    animation: msg-in 420ms var(--ease-out) both;
+  }
+
+  @keyframes msg-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+
+  .avatar {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  .avatar.hondo {
+    background: #fbf1e8;
+  }
+
+  .avatar.alerts {
+    background: #c9302c;
+    font-size: 18px;
+  }
+
+  .meta {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    line-height: 1.2;
+  }
+
+  .meta b {
+    font-weight: 700;
+    font-size: 14.5px;
+    letter-spacing: -0.01em;
+  }
+
+  .app {
+    padding: 1px 3px;
+    border-radius: 3px;
+    background: #ece9e6;
+    color: #6b6763;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  time {
+    color: #8b8783;
+    font-size: 12px;
+  }
+
+  .body {
+    min-width: 0;
+    font-size: 14.5px;
+    line-height: 1.45;
+    letter-spacing: -0.005em;
+  }
+
+  .body :global(p) {
+    margin: 3px 0 0;
+  }
+
+  .body :global(.at) {
+    color: #1264a3;
+    background: #e8f5fa;
+    border-radius: 3px;
+    padding: 0 2px;
+  }
+
+  .body :global(.src) {
+    color: #1264a3;
+    text-decoration: none;
+  }
+
+  .body :global(.muted) {
+    color: #6b6763;
+  }
+
+  .body :global(code) {
+    padding: 1px 4px;
+    border: 1px solid #e3dfdb;
+    border-radius: 4px;
+    background: #f7f5f3;
+    color: #c0392b;
+    font-size: 0.86em;
+  }
+</style>

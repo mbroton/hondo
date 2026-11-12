@@ -1,0 +1,85 @@
+---
+interface Props {
+  steps: { text: string; at: number }[];
+  end: number;
+}
+
+const { steps, end } = Astro.props;
+---
+
+<div class="status" data-tl={`${steps[0].at}:on,${end}:off`}>
+  <span class="dot"></span>
+  <span class="label">Hondo is working…</span>
+  <span class="steps">
+    {steps.map((step, i) => (
+      <span
+        class="step"
+        data-tl={`${step.at}:on${i < steps.length - 1 ? `,${steps[i + 1].at}:off` : ""}`}
+      >
+        {step.text}
+      </span>
+    ))}
+  </span>
+</div>
+
+<style>
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+    color: #6b6763;
+    font-size: 12.5px;
+    transition:
+      height 260ms var(--ease-out),
+      opacity 260ms;
+  }
+
+  .status[data-s="on"] {
+    height: 24px;
+    opacity: 1;
+  }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--saddle-hi);
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+
+  .label {
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+
+  .steps {
+    display: grid;
+    min-width: 0;
+  }
+
+  .step {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transform: translateY(4px);
+    transition:
+      opacity 200ms,
+      transform 260ms var(--ease-out);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .step[data-s="on"] {
+    opacity: 1;
+    transform: none;
+  }
+
+  @keyframes pulse {
+    50% {
+      opacity: 0.35;
+    }
+  }
+</style>

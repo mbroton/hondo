@@ -1,0 +1,219 @@
+---
+const pings = [
+  { from: "Maya", text: "are you around? checkout is down", time: "3:12" },
+  { from: "Jonas", text: "how did you fix this last time?", time: "3:14" },
+  { from: "Priya", text: "which version is live in prod?", time: "3:15" },
+  { from: "Sam", text: "sorry, one more question", time: "3:21" },
+];
+
+const quotes = [
+  {
+    text: "3 hours debugging something that probably would've taken her 10 minutes",
+    where: "r/devops",
+    href: "https://redd.it/1ubyy39",
+  },
+  {
+    text: "I genuinely cannot tell you right now what version of the payment service is live in prod.",
+    where: "r/devops",
+    href: "https://redd.it/1skaydb",
+  },
+  {
+    text: "Claude had hallucinated reading a log",
+    where: "Hacker News",
+    href: "https://news.ycombinator.com/item?id=49576365",
+  },
+];
+---
+
+<section class="section wrap" aria-labelledby="pain-title">
+  <div class="section-head">
+    <h2 class="duo" id="pain-title">
+      every team has a person who knows <span>and they are tired</span>
+    </h2>
+  </div>
+
+  <div class="bento">
+    <article class="card who">
+      <div class="pings" aria-hidden="true">
+        {pings.map((p, i) => (
+          <div class="ping" style={`--i:${i}`}>
+            <b>{p.from}</b>
+            <span>{p.text}</span>
+            <time>{p.time}</time>
+          </div>
+        ))}
+      </div>
+      <blockquote>
+        <p>“Congrats, now you're the person who knows.”</p>
+        <footer>
+          Top reply, 442 points, <a href="https://redd.it/1ubyy39">r/devops</a>
+        </footer>
+      </blockquote>
+    </article>
+
+    <article class="card stat wide">
+      <p class="num">$2M</p>
+      <p class="label">
+        median cost of one hour of a high-impact outage,{" "}
+        <a href="https://newrelic.com/resources/report/observability-forecast/2025">
+          New Relic
+        </a>
+      </p>
+    </article>
+
+    <article class="card stat">
+      <p class="num">93%</p>
+      <p class="label">
+        of teams bring 3 or more engineers into a major incident,{" "}
+        <a href="https://itbrief.co.uk/story/neubird-ai-study-finds-gap-on-incident-management-ai">
+          NeuBird survey
+        </a>
+      </p>
+    </article>
+
+    <article class="card quote">
+      <blockquote>
+        <p>“4-5 SMEs and the rest all rely on them”</p>
+        <footer>
+          <a href="https://redd.it/1kxb5u1">r/sre</a>
+        </footer>
+      </blockquote>
+    </article>
+
+    {quotes.map((q) => (
+      <article class="card quote">
+        <blockquote>
+          <p>“{q.text}”</p>
+          <footer>
+            <a href={q.href}>{q.where}</a>
+          </footer>
+        </blockquote>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .card {
+    margin: 0;
+    padding: 28px;
+    border-radius: var(--radius-xl);
+    background: var(--panel);
+  }
+
+  .who {
+    grid-row: span 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 32px;
+  }
+
+  .wide {
+    grid-column: span 2;
+  }
+
+  .pings {
+    display: grid;
+    gap: 8px;
+  }
+
+  .ping {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 2px 8px;
+    padding: 10px 14px;
+    border-radius: 16px;
+    background: var(--paper);
+    box-shadow: 0 1px 2px rgb(32 28 25 / 0.06);
+    font-size: 14px;
+    transform: rotate(calc((var(--i) - 1.5) * 0.6deg));
+  }
+
+  .ping span {
+    grid-column: 1 / -1;
+    color: var(--muted);
+  }
+
+  .ping time {
+    color: var(--dust);
+    font-size: 12px;
+  }
+
+  blockquote {
+    margin: 0;
+  }
+
+  blockquote p {
+    margin: 0;
+    font-size: 19px;
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+    text-wrap: pretty;
+  }
+
+  .who blockquote p {
+    font-size: 26px;
+    letter-spacing: -0.035em;
+  }
+
+  footer,
+  .label {
+    margin: 10px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  footer a,
+  .label a {
+    color: var(--muted);
+    text-underline-offset: 3px;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 200px;
+  }
+
+  .num {
+    margin: 0;
+    font-size: clamp(56px, 7vw, 84px);
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+  }
+
+  .quote {
+    display: flex;
+    align-items: flex-end;
+  }
+
+  @media (max-width: 860px) {
+    .bento {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .who {
+      grid-column: span 2;
+      grid-row: auto;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .bento {
+      grid-template-columns: 1fr;
+    }
+
+    .who,
+    .wide {
+      grid-column: auto;
+    }
+  }
+</style>

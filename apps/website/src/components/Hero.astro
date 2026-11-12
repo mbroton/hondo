@@ -1,0 +1,277 @@
+---
+import { repoHref } from "../site";
+import Arrow from "./Arrow.astro";
+
+const phrases = [
+  { text: "finds what changed", emoji: "🔎" },
+  { text: "shows its sources", emoji: "🧾" },
+  { text: "remembers last time", emoji: "🧠" },
+  { text: "lets your senior sleep", emoji: "😴" },
+];
+
+const question = "@hondo what changed in checkout since 10:00?";
+---
+
+<section class="hero wrap" aria-labelledby="hero-title">
+  <h1 id="hero-title">
+    <span class="lead">an on-call teammate in slack</span>
+    <span class="sr-only">
+      that finds what changed, shows its sources, remembers last time, and lets
+      your senior engineer sleep
+    </span>
+    <span class="rotator" aria-hidden="true" data-rotator>
+      {phrases.map((p, i) => (
+        <span class="phrase" data-on={i === 0 ? "" : undefined}>
+          {p.text} <span class="emoji">{p.emoji}</span>
+        </span>
+      ))}
+    </span>
+  </h1>
+
+  <p class="sub">
+    Mention @hondo in the incident thread. It checks your deploys, pull requests
+    and logs, answers with a source for each claim, and anyone in the thread can
+    steer it.
+  </p>
+
+  <div class="composer">
+    <div class="field" aria-hidden="true">
+      <span class="at">@</span>
+      <span class="typed" data-typed={question}>
+        <span class="placeholder">Message #inc-checkout</span>
+      </span>
+      <span class="caret"></span>
+    </div>
+    <a class="pill go" href={repoHref}>
+      Get it on GitHub <Arrow />
+    </a>
+  </div>
+
+  <p class="note">Open source under Apache-2.0. Runs on your servers.</p>
+</section>
+
+<style>
+  .hero {
+    padding-top: clamp(56px, 9vw, 96px);
+    text-align: center;
+  }
+
+  h1 {
+    margin: 0;
+    font-weight: 400;
+    font-size: clamp(40px, 6.4vw, 66px);
+    line-height: 1.02;
+    letter-spacing: -0.05em;
+  }
+
+  .lead {
+    display: block;
+  }
+
+  .rotator {
+    display: inline-grid;
+    margin-top: 0.06em;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.04em;
+    letter-spacing: -0.02em;
+    color: var(--dust);
+  }
+
+  .phrase {
+    grid-area: 1 / 1;
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(0.28em);
+    transition:
+      opacity 520ms var(--ease-out),
+      filter 520ms var(--ease-out),
+      transform 620ms var(--ease-out);
+    white-space: nowrap;
+  }
+
+  .phrase[data-on] {
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
+  }
+
+  .phrase[data-off] {
+    transform: translateY(-0.28em);
+  }
+
+  .emoji {
+    font-family: var(--sans);
+    font-style: normal;
+    font-size: 0.78em;
+    display: inline-block;
+    transform: translateY(-0.04em) rotate(-6deg);
+  }
+
+  .sub {
+    max-width: 34em;
+    margin: 28px auto 0;
+    color: var(--muted);
+    font-size: 17px;
+    text-wrap: pretty;
+  }
+
+  .composer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 680px;
+    margin: 40px auto 0;
+    padding: 6px 6px 6px 18px;
+    border-radius: 999px;
+    background: var(--paper);
+    box-shadow:
+      inset 0 0 0 1px var(--line),
+      0 1px 2px rgb(32 28 25 / 0.05),
+      0 18px 40px -22px rgb(32 28 25 / 0.28);
+    text-align: left;
+  }
+
+  .field {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    height: 52px;
+    font-size: 17px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .at {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 26px;
+    height: 26px;
+    margin-right: 12px;
+    border-radius: 8px;
+    background: var(--panel);
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  .typed {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .typed :global(.mention) {
+    color: #1264a3;
+    background: #e8f5fa;
+    border-radius: 4px;
+    padding: 0 2px;
+  }
+
+  .placeholder {
+    color: #a7a29d;
+  }
+
+  .caret {
+    flex: none;
+    width: 1.5px;
+    height: 22px;
+    margin-left: 1px;
+    background: var(--ink);
+    animation: blink 1s steps(1) infinite;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .go {
+    height: 52px;
+    padding: 0 24px;
+    font-size: 16px;
+  }
+
+  .note {
+    margin: 20px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  @media (max-width: 560px) {
+    .composer {
+      flex-direction: column;
+      align-items: stretch;
+      border-radius: 26px;
+      padding: 6px;
+    }
+
+    .field {
+      height: auto;
+      min-height: 52px;
+      padding: 8px 0 8px 12px;
+      white-space: normal;
+      line-height: 1.35;
+    }
+
+    .typed {
+      overflow: visible;
+    }
+
+    .go {
+      justify-content: center;
+    }
+
+    .phrase {
+      white-space: normal;
+    }
+  }
+</style>
+
+<script>
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const rotator = document.querySelector<HTMLElement>("[data-rotator]");
+  if (rotator && !reduce) {
+    const phrases = [...rotator.querySelectorAll<HTMLElement>(".phrase")];
+    let index = 0;
+    setInterval(() => {
+      const current = phrases[index];
+      index = (index + 1) % phrases.length;
+      const next = phrases[index];
+      current.removeAttribute("data-on");
+      current.setAttribute("data-off", "");
+      next.removeAttribute("data-off");
+      next.setAttribute("data-on", "");
+      setTimeout(() => current.removeAttribute("data-off"), 650);
+    }, 2800);
+  }
+
+  const typed = document.querySelector<HTMLElement>("[data-typed]");
+  if (typed) {
+    const text = typed.dataset.typed ?? "";
+    const mention = "@hondo";
+    const render = (count: number) => {
+      const shown = text.slice(0, count);
+      const head = shown.slice(0, Math.min(count, mention.length));
+      const tail = shown.slice(mention.length);
+      typed.replaceChildren();
+      const chip = document.createElement("span");
+      chip.className = "mention";
+      chip.textContent = head;
+      typed.append(chip, tail);
+    };
+    if (reduce) {
+      render(text.length);
+    } else {
+      let count = 0;
+      const tick = () => {
+        count += 1;
+        render(count);
+        if (count < text.length) setTimeout(tick, 34 + Math.random() * 60);
+      };
+      setTimeout(tick, 900);
+    }
+  }
+</script>

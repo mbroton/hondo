@@ -1,0 +1,154 @@
+---
+const items = [
+  {
+    q: "Does Hondo answer every message?",
+    a: "No. It answers mentions and direct messages. In a thread that it joined, it answers only the messages that are for it, and stays quiet when people talk among themselves.",
+  },
+  {
+    q: "Can it change things in production?",
+    a: "It can use only the tools that an admin approved, and only in the channels that an admin picked. Before a tool that can change data runs, Hondo posts the call in the thread, and a person in the channel must approve it. An admin can turn this off for each tool.",
+  },
+  {
+    q: "How do I know an answer is correct?",
+    a: "Each claim comes from a tool result. Ask for sources, and Hondo shows the tools, the queries and the links. When a lookup finds nothing, it tells you what it searched.",
+  },
+  {
+    q: "Which tools can it use?",
+    a: "GitHub and Atlassian are built in. You can also connect any remote MCP server with OAuth or a key, for example the official server of your logs or metrics tool. For an API without an MCP server, an admin can make each HTTP request into a tool.",
+  },
+  {
+    q: "Which models does it use?",
+    a: "The model that you choose, through Vercel AI Gateway, OpenAI or Anthropic. You bring the key.",
+  },
+  {
+    q: "Where does our data go?",
+    a: "Conversations and thread summaries stay in your Postgres. The model provider gets the context it needs to answer, and connected tools get the calls that Hondo makes.",
+  },
+  {
+    q: "What if Hondo crashes in the middle of a run?",
+    a: "The run continues from its recorded steps after a restart, and nothing posts twice. A failure stops that one run only.",
+  },
+  {
+    q: "Is it free?",
+    a: "Yes. Hondo is open source under the Apache-2.0 license. You run it on your servers and pay only your model provider.",
+  },
+];
+---
+
+<section class="section wrap" id="faq" aria-labelledby="faq-title">
+  <div class="faq">
+    <h2 class="duo" id="faq-title">
+      your questions <span>answered</span>
+    </h2>
+    <div class="list">
+      {items.map((item) => (
+        <details>
+          <summary>
+            {item.q}
+            <span class="plus" aria-hidden="true" />
+          </summary>
+          <p>{item.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: clamp(32px, 6vw, 80px);
+    align-items: start;
+  }
+
+  .faq h2 {
+    position: sticky;
+    top: 112px;
+  }
+
+  details {
+    border-bottom: 1px solid var(--line);
+  }
+
+  details:first-child {
+    border-top: 1px solid var(--line);
+  }
+
+  details::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size 320ms var(--ease-drawer),
+      content-visibility 320ms allow-discrete;
+  }
+
+  details[open]::details-content {
+    block-size: auto;
+  }
+
+  @supports (interpolate-size: allow-keywords) {
+    :root {
+      interpolate-size: allow-keywords;
+    }
+  }
+
+  summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    padding: 20px 0;
+    font-size: 17px;
+    letter-spacing: -0.02em;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .plus {
+    position: relative;
+    flex: none;
+    width: 12px;
+    height: 12px;
+    color: var(--dust);
+  }
+
+  .plus::before,
+  .plus::after {
+    content: "";
+    position: absolute;
+    inset: 5.25px 0;
+    background: currentColor;
+    transition: transform 260ms var(--ease-out);
+  }
+
+  .plus::after {
+    transform: rotate(90deg);
+  }
+
+  details[open] .plus::after {
+    transform: rotate(0deg);
+  }
+
+  p {
+    max-width: 36em;
+    margin: 0;
+    padding: 0 0 22px;
+    color: var(--muted);
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 860px) {
+    .faq {
+      grid-template-columns: 1fr;
+    }
+
+    .faq h2 {
+      position: static;
+    }
+  }
+</style>

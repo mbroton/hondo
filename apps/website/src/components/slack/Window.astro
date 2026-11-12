@@ -1,0 +1,156 @@
+---
+interface Props {
+  channels?: string[];
+  active?: string;
+  compact?: boolean;
+}
+
+const {
+  channels = ["eng", "deploys", "inc-checkout", "inc-eu-502", "random"],
+  active,
+  compact = false,
+} = Astro.props;
+---
+
+<div class:list={["window", { compact }]}>
+  <div class="bar">
+    <span class="lights">
+      <i></i>
+      <i></i>
+      <i></i>
+    </span>
+    <span class="search">Search Acme</span>
+  </div>
+  <div class="frame">
+    <aside class="side" aria-hidden="true">
+      <div class="ws">Acme</div>
+      <div class="group">Channels</div>
+      {channels.map((c) => (
+        <div class:list={["ch", { active: c === active }]} data-channel={c}>
+          <span>#</span> {c}
+        </div>
+      ))}
+      <div class="group">Apps</div>
+      <div class="ch app">
+        <img src="/hat.webp" alt="" width="16" height="16" /> Hondo
+      </div>
+    </aside>
+    <div class="main">
+      <slot />
+    </div>
+  </div>
+</div>
+
+<style>
+  .window {
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px;
+    background: #fff;
+    color: var(--ink);
+    text-align: left;
+    box-shadow:
+      0 0 0 1px rgb(32 28 25 / 0.08),
+      0 2px 4px rgb(32 28 25 / 0.04),
+      0 40px 80px -36px rgb(32 28 25 / 0.35);
+  }
+
+  .bar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    height: 38px;
+    padding: 0 14px;
+    background: #350d36;
+  }
+
+  .lights {
+    display: flex;
+    gap: 7px;
+  }
+
+  .lights i {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.22);
+  }
+
+  .search {
+    width: min(360px, 40vw);
+    padding: 3px 10px;
+    border-radius: 6px;
+    background: rgb(255 255 255 / 0.14);
+    color: rgb(255 255 255 / 0.7);
+    font-size: 12px;
+  }
+
+  .frame {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    height: 100%;
+  }
+
+  .side {
+    padding: 12px 8px;
+    background: var(--aubergine);
+    color: rgb(255 255 255 / 0.72);
+    font-size: 14px;
+  }
+
+  .ws {
+    padding: 2px 10px 12px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 16px;
+  }
+
+  .group {
+    padding: 12px 10px 4px;
+    font-size: 13px;
+  }
+
+  .ch {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    height: 28px;
+    padding: 0 10px;
+    border-radius: 6px;
+    transition: background 200ms;
+  }
+
+  .ch span {
+    opacity: 0.7;
+  }
+
+  .ch.active {
+    background: #1164a3;
+    color: #fff;
+  }
+
+  .main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .compact .frame {
+    grid-template-columns: 1fr;
+  }
+
+  .compact .side {
+    display: none;
+  }
+
+  @media (max-width: 720px) {
+    .frame {
+      grid-template-columns: 1fr;
+    }
+
+    .side {
+      display: none;
+    }
+  }
+</style>
